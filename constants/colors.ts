@@ -1,19 +1,18 @@
-const Colors={
-    primary: "#1A3C8F",
-    primaryLight: "#4c6fc2",
-    primaryDark: "#0D2563",
-    accent: "#00c294",
+const Colors = {
+  primary: "#1E3ABA",
+  primaryLight: "#3B82F6",
+  primaryDark: "#1E40AF",
 
-    success:"#4CAF50",
-    warning:"#FF9800",
-    error: "#F44336",
-    info:"#2196F3",
+  success: "#16A34A",
+  warning: "#F59E08",
+  error: "#DC2626",
 
-    dark: "#1A1A1A",
-    grey700: "#424242",
-    grey500: "#9E9E9E",
-    grey300: "#E0E0E0",
-    background: "#F5F7FF",
-    white: "#FFFFFF"
-}
+  dark: "#0F172A",
+  grey700: "#334155",
+  grey500: "#647488",
+  grey200: "#E2E8F0",
+  background: "#F8FAFC",
+  white: "#FFFFFF",
+};
+
 export default Colors;
