@@ -11,7 +11,7 @@ const Colors={
 
     dark: "#1A1A1A",
     grey700: "#424242",
-    GREY500: "#9E9E9E",
+    grey500: "#9E9E9E",
     grey300: "#E0E0E0",
     background: "#F5F7FF",
     white: "#FFFFFF"
