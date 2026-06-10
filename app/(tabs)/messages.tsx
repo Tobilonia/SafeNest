@@ -1,6 +1,7 @@
+import { useState } from "react";
 import {
   View, Text, StyleSheet, FlatList,
-  TouchableOpacity
+  TouchableOpacity, TextInput
 } from "react-native";
 import { router } from "expo-router";
 import Colors from "../../constants/colors";
@@ -8,54 +9,115 @@ import Colors from "../../constants/colors";
 const conversations = [
   {
     id: "1",
-    name: "Sodiq Adeleke",
+    name: "Alexa Johnson",
     role: "Verified Agent",
-    lastMessage: "Yes, the apartment is still available.",
-    time: "10:32 AM",
+    lastMessage: "Hi, I'm interested in the 2 bedroom...",
+    time: "11:00 AM",
     unread: 2,
     verified: true,
   },
   {
     id: "2",
-    name: "Victor Okafor",
+    name: "David Okoro",
     role: "Verified Landlord",
-    lastMessage: "You can schedule a viewing for tomorrow.",
-    time: "Yesterday",
+    lastMessage: "Thanks for the information",
+    time: "10:15 AM",
     unread: 0,
     verified: true,
   },
   {
     id: "3",
-    name: "Amaka Properties",
-    role: "Agent",
-    lastMessage: "Please send your documents for verification.",
-    time: "Mon",
-    unread: 1,
-    verified: false,
+    name: "SafeNest Support",
+    role: "Support",
+    lastMessage: "Your viewing has been scheduled...",
+    time: "Yesterday",
+    unread: 0,
+    verified: true,
+  },
+  {
+    id: "4",
+    name: "Alexa Johnson",
+    role: "Verified Agent",
+    lastMessage: "Please I'm interested in the 2 bedroom...",
+    time: "Wednesday",
+    unread: 0,
+    verified: true,
   },
 ];
 
+const tabs = ["All", "Unread", "Favorites"];
+
 export default function MessagesScreen() {
+  const [activeTab, setActiveTab] = useState("All");
+  const [search, setSearch] = useState("");
+
+  const filteredConversations = conversations.filter((c) => {
+    if (activeTab === "Unread") return c.unread > 0;
+    if (activeTab === "Favorites") return false;
+    return c.name.toLowerCase().includes(search.toLowerCase());
+  });
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Text style={styles.backText}>←</Text>
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>Messages</Text>
-        <View style={styles.securityNotice}>
-          <Text style={styles.securityText}>
-            🔒 Chats are monitored and stored for security
-          </Text>
-        </View>
+        <View style={{ width: 24 }} />
+      </View>
+
+      <View style={styles.searchContainer}>
+        <Text style={styles.searchIcon}>🔍</Text>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search messages..."
+          placeholderTextColor={Colors.grey500}
+          value={search}
+          onChangeText={setSearch}
+        />
+      </View>
+
+      <View style={styles.tabsContainer}>
+        {tabs.map((tab) => (
+          <TouchableOpacity
+            key={tab}
+            style={[
+              styles.tab,
+              activeTab === tab && styles.tabActive,
+            ]}
+            onPress={() => setActiveTab(tab)}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === tab && styles.tabTextActive,
+              ]}
+            >
+              {tab}
+              {tab === "Unread" && (
+                <Text style={styles.unreadCount}>
+                  {" "}
+                  {conversations.filter((c) => c.unread > 0).length}
+                </Text>
+              )}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
 
       <FlatList
-        data={conversations}
+        data={filteredConversations}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContent}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyIcon}>💬</Text>
-            <Text style={styles.emptyText}>No messages yet</Text>
+            <Text style={styles.emptyText}>
+              {activeTab === "Favorites"
+                ? "No favorite messages"
+                : "No messages yet"}
+            </Text>
             <Text style={styles.emptySubtext}>
               Start a conversation from any property listing
             </Text>
@@ -64,12 +126,14 @@ export default function MessagesScreen() {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.conversationCard}
-            onPress={() => router.push(`/property/${item.id}`)}
+            onPress={() => router.push({pathname: "/chat/[id]" as any, params: { id: item.id }})}
           >
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>
-                {item.name.charAt(0)}
-              </Text>
+            <View style={styles.avatarContainer}>
+              <View style={styles.avatar}>
+                <Text style={styles.avatarText}>
+                  {item.name.charAt(0)}
+                </Text>
+              </View>
               {item.verified && (
                 <View style={styles.verifiedDot} />
               )}
@@ -77,21 +141,26 @@ export default function MessagesScreen() {
 
             <View style={styles.conversationInfo}>
               <View style={styles.conversationHeader}>
-                <Text style={styles.conversationName}>{item.name}</Text>
-                <Text style={styles.conversationTime}>{item.time}</Text>
+                <Text style={styles.conversationName}>
+                  {item.name}
+                </Text>
+                <Text style={styles.conversationTime}>
+                  {item.time}
+                </Text>
               </View>
-              <Text style={styles.conversationRole}>{item.role}</Text>
-              <Text
-                style={styles.lastMessage}
-                numberOfLines={1}
-              >
+              <Text style={styles.conversationRole}>
+                {item.role}
+              </Text>
+              <Text style={styles.lastMessage} numberOfLines={1}>
                 {item.lastMessage}
               </Text>
             </View>
 
             {item.unread > 0 && (
               <View style={styles.unreadBadge}>
-                <Text style={styles.unreadText}>{item.unread}</Text>
+                <Text style={styles.unreadBadgeText}>
+                  {item.unread}
+                </Text>
               </View>
             )}
           </TouchableOpacity>
@@ -107,39 +176,86 @@ export default function MessagesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.white,
   },
   header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 24,
     paddingTop: 60,
     paddingBottom: 16,
     backgroundColor: Colors.white,
   },
+  backText: {
+    fontSize: 24,
+    color: Colors.dark,
+  },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     color: Colors.dark,
-    marginBottom: 8,
   },
-  securityNotice: {
-    backgroundColor: "#EEF2FF",
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 24,
+    marginBottom: 12,
+    backgroundColor: Colors.background,
+    borderRadius: 12,
     paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.grey200,
   },
-  securityText: {
+  searchIcon: {
+    fontSize: 16,
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    paddingVertical: 10,
+    fontSize: 14,
+    color: Colors.dark,
+  },
+  tabsContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 24,
+    marginBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.grey200,
+  },
+  tab: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    marginRight: 8,
+    borderBottomWidth: 2,
+    borderBottomColor: "transparent",
+  },
+  tabActive: {
+    borderBottomColor: Colors.primary,
+  },
+  tabText: {
+    fontSize: 14,
+    color: Colors.grey500,
+    fontWeight: "500",
+  },
+  tabTextActive: {
+    color: Colors.primary,
+    fontWeight: "600",
+  },
+  unreadCount: {
     fontSize: 12,
     color: Colors.primary,
-  },
-  listContent: {
-    paddingBottom: 24,
+    fontWeight: "bold",
   },
   conversationCard: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 24,
     paddingVertical: 16,
-    backgroundColor: Colors.white,
+  },
+  avatarContainer: {
+    marginRight: 12,
   },
   avatar: {
     width: 48,
@@ -148,7 +264,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 12,
   },
   avatarText: {
     fontSize: 20,
@@ -201,7 +316,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginLeft: 8,
   },
-  unreadText: {
+  unreadBadgeText: {
     fontSize: 11,
     fontWeight: "bold",
     color: Colors.white,
@@ -229,5 +344,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.grey500,
     textAlign: "center",
+    paddingHorizontal: 32,
   },
 });

@@ -13,6 +13,10 @@ export default function RootLayout() {
         <Stack.Screen name="filter" />
         <Stack.Screen name="listings" />
         <Stack.Screen name="request-to-rent" />
+        <Stack.Screen name="chat/[id]" />
+        <Stack.Screen name="review-submit" />
+        <Stack.Screen name="pay-deposit" />
+        <Stack.Screen name="payment-success" />
       </Stack>
     </>
   );
