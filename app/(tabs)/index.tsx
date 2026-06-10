@@ -1,181 +1,287 @@
 import { useState } from "react";
 import {
   View, Text, StyleSheet, TextInput,
-  TouchableOpacity, FlatList, ScrollView
+  TouchableOpacity, FlatList, ScrollView,
+  Image
 } from "react-native";
-import Colors from "../../constants/colors";
 import { router } from "expo-router";
+import Colors from "../../constants/colors";
 
 const properties = [
   {
     id: "1",
-    title: "Lovely 2 Bedroom Flat",
-    price: "850,000",
-    location: "Yaba, Lagos",
-    type: "2 Bedroom Flat",
+    title: "2 Bedroom Apartment",
+    price: "2,500,000",
+    location: "Lekki Phase 1, Lagos",
+    type: "Apartment",
     beds: 2,
     baths: 2,
+    size: "120",
     verified: true,
     rating: 4.5,
   },
   {
     id: "2",
-    title: "Modern 3 Bedroom Flat",
-    price: "1,500,000",
-    location: "Lekki, Lagos",
-    type: "3 Bedroom Flat",
+    title: "3 Bedroom Duplex",
+    price: "4,500,000",
+    location: "Ikoyi, Lagos",
+    type: "Houses",
     beds: 3,
     baths: 3,
+    size: "200",
     verified: true,
     rating: 4.8,
   },
   {
     id: "3",
-    title: "Cozy 1 Bedroom Flat",
-    price: "450,000",
-    location: "Festac, Lagos",
-    type: "1 Bedroom Flat",
+    title: "Mini Flat in Yaba",
+    price: "1,000,000",
+    location: "Yaba, Lagos",
+    type: "Rooms",
     beds: 1,
     baths: 1,
+    size: "60",
+    verified: true,
+    rating: 4.2,
+  },
+  {
+    id: "4",
+    title: "Studio Apartment",
+    price: "850,000",
+    location: "Victoria Island, Lagos",
+    type: "Apartment",
+    beds: 1,
+    baths: 1,
+    size: "40",
     verified: true,
     rating: 4.0,
   },
   {
-    id: "4",
-    title: "Spacious Studio Apartment",
-    price: "300,000",
-    location: "Surulere, Lagos",
-    type: "Studio",
-    beds: 1,
+    id: "5",
+    title: "3 Bedroom Apartment",
+    price: "2,500,000",
+    location: "Lekki Phase 1, Lagos",
+    type: "Apartment",
+    beds: 3,
     baths: 1,
-    verified: false,
-    rating: 3.8,
+    size: "200",
+    verified: true,
+    rating: 4.6,
   },
+];
+
+const popularLocations = [
+  { id: "1", name: "Lekki", count: "100+" },
+  { id: "2", name: "Yaba", count: "150+" },
+  { id: "3", name: "Victoria Island", count: "80+" },
+  { id: "4", name: "Ikeja", count: "120+" },
 ];
 
 export default function HomeScreen() {
   const [search, setSearch] = useState("");
-  const [activeFilter, setActiveFilter] = useState("All");
 
-  const filters = ["All", "Apartment", "House", "Room", "Studio"];
-
-  const filteredProperties = properties.filter((p) => {
-    const matchesSearch =
-      p.title.toLowerCase().includes(search.toLowerCase()) ||
-      p.location.toLowerCase().includes(search.toLowerCase());
-    const matchesFilter =
-      activeFilter === "All" ||
-      p.type.toLowerCase().includes(activeFilter.toLowerCase());
-    return matchesSearch && matchesFilter;
-  });
+  const filteredProperties = properties.filter((p) =>
+    p.title.toLowerCase().includes(search.toLowerCase()) ||
+    p.location.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
+      
       <View style={styles.header}>
-        <View>
-          <Text style={styles.greeting}>Good morning 👋</Text>
-          <Text style={styles.headerTitle}>Find your perfect home</Text>
+        <View style={styles.locationRow}>
+          <Text style={styles.locationIcon}>📍</Text>
+          <Text style={styles.locationText}>Lagos, Nigeria</Text>
+          <Text style={styles.locationArrow}>▾</Text>
         </View>
-        <TouchableOpacity style={styles.notificationBtn}>
-          <Text style={styles.notificationIcon}>🔔</Text>
+        <View style={styles.headerIcons}>
+          <TouchableOpacity style={styles.iconBtn}>
+            <Text style={styles.iconText}>🔔</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.avatarBtn}>
+            <Text style={styles.avatarText}>O</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      
+      <View style={styles.greetingSection}>
+        <Text style={styles.greeting}>Good morning, Olamide 👋</Text>
+        <Text style={styles.greetingSubtitle}>
+          Find and rent your next home with confidence
+        </Text>
+      </View>
+
+      
+      <View style={styles.searchRow}>
+        <View style={styles.searchContainer}>
+          <Text style={styles.searchIcon}>🔍</Text>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search location, apartments, houses..."
+            placeholderTextColor={Colors.grey500}
+            value={search}
+            onChangeText={setSearch}
+          />
+        </View>
+        <TouchableOpacity
+          style={styles.filterBtn}
+          onPress={() => router.push("/filter")}
+        >
+          <Text style={styles.filterBtnText}>⇒</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.searchContainer}>
-        <Text style={styles.searchIcon}>🔍</Text>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search by location or property name"
-          placeholderTextColor={Colors.grey500}
-          value={search}
-          onChangeText={setSearch}
-        />
+      
+      <View style={styles.banner}>
+        <View style={styles.bannerContent}>
+          <Text style={styles.bannerTitle}>
+            Rent safely.{"\n"}Move with{"\n"}confidence.
+          </Text>
+          <View style={styles.bannerBadges}>
+            <Text style={styles.bannerBadge}>✓ Verified Properties</Text>
+            <Text style={styles.bannerBadge}>✓ Secure Payments</Text>
+            <Text style={styles.bannerBadge}>✓ Trusted Agents</Text>
+          </View>
+        </View>
+        <Text style={styles.bannerEmoji}>🏠</Text>
+      </View>
+
+      
+      <View style={styles.quickActions}>
+        {[
+          { icon: "🏠", label: "Rent Homes" },
+          { icon: "🛏", label: "Find Rooms" },
+          { icon: "📍", label: "Nearby" },
+          { icon: "❤️", label: "Saved" },
+          { icon: "👤", label: "Agents" },
+        ].map((item) => (
+          <TouchableOpacity key={item.label} style={styles.quickAction}>
+            <View style={styles.quickActionIcon}>
+              <Text style={styles.quickActionEmoji}>{item.icon}</Text>
+            </View>
+            <Text style={styles.quickActionLabel}>{item.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+     
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Verified Listings</Text>
+        <TouchableOpacity onPress={() => router.push("/listings")}>
+          <Text style={styles.seeAll}>see all ›</Text>
+        </TouchableOpacity>
       </View>
 
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={styles.filtersContainer}
-        contentContainerStyle={styles.filtersContent}
+        contentContainerStyle={styles.horizontalList}
       >
-        {filters.map((filter) => (
+        {filteredProperties.map((item) => (
           <TouchableOpacity
-            key={filter}
-            style={[
-              styles.filterBtn,
-              activeFilter === filter && styles.filterBtnActive,
-            ]}
-            onPress={() => setActiveFilter(filter)}
-          >
-            <Text
-              style={[
-                styles.filterText,
-                activeFilter === filter && styles.filterTextActive,
-              ]}
-            >
-              {filter}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
-      <FlatList
-        data={filteredProperties}
-        keyExtractor={(item) => item.id}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContent}
-        ListHeaderComponent={
-          <Text style={styles.resultsText}>
-            {filteredProperties.length} properties found
-          </Text>
-        }
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyIcon}>🏠</Text>
-            <Text style={styles.emptyText}>No properties found</Text>
-            <Text style={styles.emptySubtext}>
-              Try adjusting your search or filters
-            </Text>
-          </View>
-        }
-        renderItem={({ item }) => (
-          <TouchableOpacity
+            key={item.id}
             style={styles.propertyCard}
             onPress={() => router.push(`/property/${item.id}`)}
           >
             <View style={styles.propertyImage}>
-              <Text style={styles.propertyImagePlaceholder}>🏢</Text>
+              <Text style={styles.propertyEmoji}>🏢</Text>
               {item.verified && (
                 <View style={styles.verifiedBadge}>
                   <Text style={styles.verifiedText}>✓ Verified</Text>
                 </View>
               )}
+              <TouchableOpacity style={styles.heartBtn}>
+                <Text>🤍</Text>
+              </TouchableOpacity>
             </View>
-
             <View style={styles.propertyInfo}>
-              <View style={styles.propertyHeader}>
-                <Text style={styles.propertyType}>{item.type}</Text>
-                <Text style={styles.propertyRating}>⭐ {item.rating}</Text>
-              </View>
-
-              <Text style={styles.propertyTitle}>{item.title}</Text>
-              <Text style={styles.propertyLocation}>📍 {item.location}</Text>
-
-              <View style={styles.propertyFooter}>
-                <Text style={styles.propertyPrice}>
-                  ₦{item.price}
-                  <Text style={styles.perYear}>/year</Text>
-                </Text>
-                <View style={styles.propertyDetails}>
-                  <Text style={styles.detailText}>🛏 {item.beds}</Text>
-                  <Text style={styles.detailText}>🚿 {item.baths}</Text>
-                </View>
+              <Text style={styles.propertyTitle} numberOfLines={1}>
+                {item.title}
+              </Text>
+              <Text style={styles.propertyLocation}>
+                📍 {item.location}
+              </Text>
+              <Text style={styles.propertyPrice}>
+                ₦{item.price}
+                <Text style={styles.perYear}> /year</Text>
+              </Text>
+              <View style={styles.propertyDetails}>
+                <Text style={styles.detailText}>🛏 {item.beds}</Text>
+                <Text style={styles.detailText}>🚿 {item.baths}</Text>
+                <Text style={styles.detailText}>📐 {item.size}m²</Text>
               </View>
             </View>
           </TouchableOpacity>
-        )}
-      />
-    </View>
+        ))}
+      </ScrollView>
+
+      {/* Safety Banner */}
+      <View style={styles.safetyBanner}>
+        <Text style={styles.safetyIcon}>🏡</Text>
+        <View style={styles.safetyContent}>
+          <Text style={styles.safetyTitle}>Your safety is our priority</Text>
+          <Text style={styles.safetyText}>
+            All payments are secured with escrow until you confirm
+          </Text>
+        </View>
+        <TouchableOpacity>
+          <Text style={styles.learnMore}>Learn more</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Popular Locations */}
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Popular Locations</Text>
+        <TouchableOpacity>
+          <Text style={styles.seeAll}>View map 📍</Text>
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.horizontalList}
+      >
+        {popularLocations.map((loc) => (
+          <TouchableOpacity key={loc.id} style={styles.locationCard}>
+            <View style={styles.locationImage}>
+              <Text style={styles.locationEmoji}>🌆</Text>
+            </View>
+            <Text style={styles.locationName}>{loc.name}</Text>
+            <Text style={styles.locationCount}>
+              {loc.count} properties
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+
+      {/* How It Works */}
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>How It Works</Text>
+      </View>
+
+      <View style={styles.howItWorks}>
+        {[
+          { step: "1", icon: "🔍", title: "Search", desc: "Find properties that fit your needs" },
+          { step: "2", icon: "💬", title: "Connect", desc: "Chat with agents or landlords" },
+          { step: "3", icon: "🛡️", title: "Secure & Rent", desc: "Pay securely and move in" },
+        ].map((item) => (
+          <View key={item.step} style={styles.howItWorksItem}>
+            <View style={styles.howItWorksIcon}>
+              <Text style={styles.howItWorksEmoji}>{item.icon}</Text>
+            </View>
+            <Text style={styles.howItWorksTitle}>{item.title}</Text>
+            <Text style={styles.howItWorksDesc}>{item.desc}</Text>
+          </View>
+        ))}
+      </View>
+
+      <View style={styles.bottomPadding} />
+    </ScrollView>
   );
 }
 
@@ -190,38 +296,84 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 24,
     paddingTop: 60,
-    paddingBottom: 16,
+    paddingBottom: 8,
     backgroundColor: Colors.white,
   },
-  greeting: {
-    fontSize: 14,
-    color: Colors.grey500,
-    marginBottom: 4,
+  locationRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
   },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
+  locationIcon: {
+    fontSize: 14,
+  },
+  locationText: {
+    fontSize: 14,
+    fontWeight: "600",
     color: Colors.dark,
   },
-  notificationBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+  locationArrow: {
+    fontSize: 12,
+    color: Colors.grey500,
+  },
+  headerIcons: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  iconBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: Colors.background,
     alignItems: "center",
     justifyContent: "center",
   },
-  notificationIcon: {
+  iconText: {
+    fontSize: 18,
+  },
+  avatarBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: Colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  avatarText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: Colors.white,
+  },
+  greetingSection: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    backgroundColor: Colors.white,
+  },
+  greeting: {
     fontSize: 20,
+    fontWeight: "bold",
+    color: Colors.dark,
+    marginBottom: 4,
+  },
+  greetingSubtitle: {
+    fontSize: 13,
+    color: Colors.grey500,
+  },
+  searchRow: {
+    flexDirection: "row",
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    backgroundColor: Colors.white,
+    gap: 8,
   },
   searchContainer: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Colors.white,
-    marginHorizontal: 24,
-    marginVertical: 16,
+    backgroundColor: Colors.background,
     borderRadius: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     borderWidth: 1,
     borderColor: Colors.grey200,
   },
@@ -231,52 +383,108 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    paddingVertical: 12,
-    fontSize: 14,
+    paddingVertical: 10,
+    fontSize: 13,
     color: Colors.dark,
   },
-  filtersContainer: {
-    maxHeight: 48,
+  filterBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: Colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  filterBtnText: {
+    fontSize: 18,
+    color: Colors.white,
+    fontWeight: "bold",
+  },
+  banner: {
+    flexDirection: "row",
+    backgroundColor: Colors.primary,
+    marginHorizontal: 24,
+    marginVertical: 16,
+    borderRadius: 16,
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  bannerContent: {
+    flex: 1,
+  },
+  bannerTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: Colors.white,
     marginBottom: 8,
   },
-  filtersContent: {
-    paddingHorizontal: 24,
-    gap: 8,
+  bannerBadges: {
+    gap: 4,
   },
-  filterBtn: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: Colors.grey200,
-    backgroundColor: Colors.white,
-  },
-  filterBtnActive: {
-    backgroundColor: Colors.primary,
-    borderColor: Colors.primary,
-  },
-  filterText: {
-    fontSize: 13,
-    color: Colors.grey500,
-    fontWeight: "500",
-  },
-  filterTextActive: {
+  bannerBadge: {
+    fontSize: 12,
     color: Colors.white,
+    opacity: 0.9,
+  },
+  bannerEmoji: {
+    fontSize: 64,
+  },
+  quickActions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    backgroundColor: Colors.white,
+    marginBottom: 8,
+  },
+  quickAction: {
+    alignItems: "center",
+    gap: 6,
+  },
+  quickActionIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: Colors.background,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  quickActionEmoji: {
+    fontSize: 22,
+  },
+  quickActionLabel: {
+    fontSize: 11,
+    color: Colors.dark,
+    fontWeight: "500",
+    textAlign: "center",
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: Colors.dark,
+  },
+  seeAll: {
+    fontSize: 13,
+    color: Colors.primary,
     fontWeight: "600",
   },
-  listContent: {
+  horizontalList: {
     paddingHorizontal: 24,
-    paddingBottom: 24,
-  },
-  resultsText: {
-    fontSize: 14,
-    color: Colors.grey500,
-    marginVertical: 12,
+    gap: 12,
+    paddingBottom: 8,
   },
   propertyCard: {
+    width: 200,
     backgroundColor: Colors.white,
     borderRadius: 16,
-    marginBottom: 16,
     overflow: "hidden",
     shadowColor: Colors.dark,
     shadowOffset: { width: 0, height: 2 },
@@ -285,96 +493,171 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   propertyImage: {
-    height: 180,
+    height: 130,
     backgroundColor: Colors.grey200,
     alignItems: "center",
     justifyContent: "center",
   },
-  propertyImagePlaceholder: {
-    fontSize: 48,
+  propertyEmoji: {
+    fontSize: 40,
   },
   verifiedBadge: {
     position: "absolute",
-    top: 12,
-    left: 12,
+    top: 8,
+    left: 8,
     backgroundColor: Colors.success,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
     borderRadius: 20,
   },
   verifiedText: {
     color: Colors.white,
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: "bold",
   },
+  heartBtn: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: Colors.white,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   propertyInfo: {
-    padding: 16,
-  },
-  propertyHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 4,
-  },
-  propertyType: {
-    fontSize: 12,
-    color: Colors.grey500,
-    fontWeight: "500",
-  },
-  propertyRating: {
-    fontSize: 12,
-    color: Colors.dark,
-    fontWeight: "500",
+    padding: 12,
   },
   propertyTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     color: Colors.dark,
     marginBottom: 4,
   },
   propertyLocation: {
-    fontSize: 13,
+    fontSize: 12,
     color: Colors.grey500,
-    marginBottom: 12,
-  },
-  propertyFooter: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    marginBottom: 6,
   },
   propertyPrice: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: Colors.primary,
+    marginBottom: 6,
   },
   perYear: {
-    fontSize: 12,
+    fontSize: 11,
     color: Colors.grey500,
     fontWeight: "normal",
   },
   propertyDetails: {
     flexDirection: "row",
-    gap: 12,
+    gap: 8,
   },
   detailText: {
-    fontSize: 13,
+    fontSize: 11,
     color: Colors.grey500,
   },
-  emptyContainer: {
+  safetyBanner: {
+    flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 60,
+    backgroundColor: "#EEF2FF",
+    marginHorizontal: 24,
+    marginVertical: 16,
+    borderRadius: 12,
+    padding: 16,
+    gap: 12,
   },
-  emptyIcon: {
-    fontSize: 48,
-    marginBottom: 16,
+  safetyIcon: {
+    fontSize: 32,
   },
-  emptyText: {
-    fontSize: 16,
+  safetyContent: {
+    flex: 1,
+  },
+  safetyTitle: {
+    fontSize: 13,
     fontWeight: "bold",
     color: Colors.dark,
+    marginBottom: 2,
+  },
+  safetyText: {
+    fontSize: 12,
+    color: Colors.grey500,
+    lineHeight: 16,
+  },
+  learnMore: {
+    fontSize: 12,
+    color: Colors.primary,
+    fontWeight: "600",
+  },
+  locationCard: {
+    width: 120,
+    borderRadius: 12,
+    overflow: "hidden",
+    backgroundColor: Colors.white,
+  },
+  locationImage: {
+    height: 80,
+    backgroundColor: Colors.grey200,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  locationEmoji: {
+    fontSize: 32,
+  },
+  locationName: {
+    fontSize: 13,
+    fontWeight: "bold",
+    color: Colors.dark,
+    padding: 8,
+    paddingBottom: 2,
+  },
+  locationCount: {
+    fontSize: 11,
+    color: Colors.grey500,
+    paddingHorizontal: 8,
+    paddingBottom: 8,
+  },
+  howItWorks: {
+    flexDirection: "row",
+    paddingHorizontal: 24,
+    gap: 12,
+    marginBottom: 16,
+  },
+  howItWorksItem: {
+    flex: 1,
+    backgroundColor: Colors.white,
+    borderRadius: 12,
+    padding: 12,
+    alignItems: "center",
+  },
+  howItWorksIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: "#EEF2FF",
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 8,
   },
-  emptySubtext: {
-    fontSize: 14,
+  howItWorksEmoji: {
+    fontSize: 20,
+  },
+  howItWorksTitle: {
+    fontSize: 13,
+    fontWeight: "bold",
+    color: Colors.dark,
+    textAlign: "center",
+    marginBottom: 4,
+  },
+  howItWorksDesc: {
+    fontSize: 11,
     color: Colors.grey500,
+    textAlign: "center",
+    lineHeight: 16,
+  },
+  bottomPadding: {
+    height: 24,
   },
 });
