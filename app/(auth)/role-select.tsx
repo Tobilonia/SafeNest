@@ -8,19 +8,19 @@ const roles = [
     id: "renter",
     title: "Renter",
     description: "I want to find a place to rent",
-    image: require("../../assets/images/icon.png"),
+   image: require("../../assets/images/roles/renter.jpg"),
   },
   {
     id: "agent",
     title: "Agent",
     description: "I want to help people find rental properties",
-    image: require("../../assets/images/icon.png"),
+    image: require("../../assets/images/roles/agent.jpg"),
   },
   {
     id: "landlord",
     title: "Landlord",
     description: "I want to list and manage my properties",
-    image: require("../../assets/images/icon.png"),
+    image: require("../../assets/images/roles/landlord.jpg"),
   },
 ];
 

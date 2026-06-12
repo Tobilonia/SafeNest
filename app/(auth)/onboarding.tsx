@@ -11,7 +11,7 @@ const slides = [
     title: "Rent Safely.",
     subtitle: "Move with Confidence.",
     description: "Verified listings, trusted agents, and secure payments — all in one place.",
-    image: require("../../assets/images/icon.png"),
+    image: require("../../assets/images/onboarding/onboarding-1.png"),
   },
   {
     id: "2",
