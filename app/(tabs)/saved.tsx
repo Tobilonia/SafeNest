@@ -1,12 +1,16 @@
+import { router } from "expo-router";
 import { useState } from "react";
 import {
-  View, Text, StyleSheet, FlatList,
-  TouchableOpacity, ScrollView
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { router } from "expo-router";
 import Colors from "../../constants/colors";
 
-const savedProperties = [
+const initialSavedProperties = [
   {
     id: "1",
     title: "2 Bedroom Apartment",
@@ -79,6 +83,9 @@ const tabs = ["All", "Apartments", "Houses", "Rooms"];
 
 export default function SavedScreen() {
   const [activeTab, setActiveTab] = useState("All");
+  const [savedProperties, setSavedProperties] = useState(
+    initialSavedProperties,
+  );
 
   const filteredProperties =
     activeTab === "All"
@@ -105,10 +112,7 @@ export default function SavedScreen() {
           {tabs.map((tab) => (
             <TouchableOpacity
               key={tab}
-              style={[
-                styles.tab,
-                activeTab === tab && styles.tabActive,
-              ]}
+              style={[styles.tab, activeTab === tab && styles.tabActive]}
               onPress={() => setActiveTab(tab)}
             >
               <Text
@@ -156,9 +160,7 @@ export default function SavedScreen() {
               <Text style={styles.propertyTitle} numberOfLines={1}>
                 {item.title}
               </Text>
-              <Text style={styles.propertyLocation}>
-                📍 {item.location}
-              </Text>
+              <Text style={styles.propertyLocation}>📍 {item.location}</Text>
               <Text style={styles.propertyPrice}>
                 ₦{item.price}
                 <Text style={styles.perYear}> /year</Text>
@@ -170,7 +172,14 @@ export default function SavedScreen() {
               </View>
             </View>
 
-            <TouchableOpacity style={styles.heartBtn}>
+            <TouchableOpacity
+              style={styles.heartBtn}
+              onPress={() =>
+                setSavedProperties((prev) =>
+                  prev.filter((p) => p.id !== item.id),
+                )
+              }
+            >
               <Text style={styles.heartIcon}>❤️</Text>
             </TouchableOpacity>
           </TouchableOpacity>
@@ -178,7 +187,10 @@ export default function SavedScreen() {
       />
 
       <View style={styles.clearContainer}>
-        <TouchableOpacity style={styles.clearButton}>
+        <TouchableOpacity
+          style={styles.clearButton}
+          onPress={() => setSavedProperties([])}
+        >
           <Text style={styles.clearText}>Clear all Saved</Text>
         </TouchableOpacity>
       </View>

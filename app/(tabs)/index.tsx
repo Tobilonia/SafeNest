@@ -98,10 +98,10 @@ export default function HomeScreen() {
           <Text style={styles.locationArrow}>▾</Text>
         </View>
         <View style={styles.headerIcons}>
-          <TouchableOpacity style={styles.iconBtn}>
+          <TouchableOpacity style={styles.iconBtn} onPress={() => router.push("/notifications" as any)}>
             <Text style={styles.iconText}>🔔</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.avatarBtn}>
+          <TouchableOpacity style={styles.avatarBtn} onPress={() => router.push("/(tabs)/profile" as any)}>
             <Text style={styles.avatarText}>O</Text>
           </TouchableOpacity>
         </View>
@@ -153,13 +153,17 @@ export default function HomeScreen() {
       
       <View style={styles.quickActions}>
         {[
-          { icon: "🏠", label: "Rent Homes" },
-          { icon: "🛏", label: "Find Rooms" },
-          { icon: "📍", label: "Nearby" },
-          { icon: "❤️", label: "Saved" },
-          { icon: "👤", label: "Agents" },
+          { icon: "🏠", label: "Rent Homes", route: "/listings" },
+          { icon: "🛏", label: "Find Rooms", route: "/listings" },
+          { icon: "📍", label: "Nearby", route: "/listings" },
+          { icon: "❤️", label: "Saved", route: "/(tabs)/saved" },
+          { icon: "👤", label: "Agents", route: null },
         ].map((item) => (
-          <TouchableOpacity key={item.label} style={styles.quickAction}>
+          <TouchableOpacity
+            key={item.label}
+            style={styles.quickAction}
+            onPress={() => item.route && router.push(item.route as any)}
+          >
             <View style={styles.quickActionIcon}>
               <Text style={styles.quickActionEmoji}>{item.icon}</Text>
             </View>
