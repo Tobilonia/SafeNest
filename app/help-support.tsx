@@ -59,6 +59,13 @@ export default function HelpSupportScreen() {
                 styles.topicRow,
                 index < topics.length - 1 && styles.topicBorder,
               ]}
+              onPress={() => {
+                if (topic.id === "5") {
+                  router.push("/report-scam" as any);
+                } else {
+                  router.push("/chat/support" as any);
+                }
+              }}
             >
               <View style={styles.topicLeft}>
                 <Text style={styles.topicIcon}>{topic.icon}</Text>
@@ -72,7 +79,7 @@ export default function HelpSupportScreen() {
 
       {/* Chat with Support Button */}
       <View style={styles.bottomContainer}>
-        <TouchableOpacity style={styles.chatButton}>
+        <TouchableOpacity style={styles.chatButton} onPress={() => router.push("/chat/support" as any)}>
           <Text style={styles.chatButtonText}>Chat with Support</Text>
         </TouchableOpacity>
       </View>

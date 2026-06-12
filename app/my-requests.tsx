@@ -71,7 +71,7 @@ function EmptyState() {
       <Text style={styles.emptyEmoji}>📋</Text>
       <Text style={styles.emptyTitle}>No requests yet</Text>
       <Text style={styles.emptySubtitle}>When you request to rent a property, it will appear here.</Text>
-      <TouchableOpacity style={styles.browseBtn} onPress={() => router.push("/" as any)}>
+      <TouchableOpacity style={styles.browseBtn} onPress={() => router.push("/(tabs)" as any)}>
         <Text style={styles.browseBtnText}>Browse Properties</Text>
       </TouchableOpacity>
     </View>
