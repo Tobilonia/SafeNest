@@ -23,6 +23,15 @@ export default function CheckEmailScreen() {
             <Text style={styles.resendLink}>Resend email</Text>
           </Text>
         </TouchableOpacity>
+
+        {/* TEMP: simulates tapping the reset link in the email.
+            Remove once real email deep-linking is wired up in API integration phase. */}
+        <TouchableOpacity
+          style={styles.continueButton}
+          onPress={() => router.push("/(auth)/create-password")}
+        >
+          <Text style={styles.continueButtonText}>I clicked the link</Text>
+        </TouchableOpacity>
       </View>
 
       <TouchableOpacity onPress={() => router.push("/(auth)/login")}>
@@ -74,9 +83,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.grey500,
     textAlign: "center",
+    marginBottom: 24,
   },
   resendLink: {
     color: Colors.primary,
+    fontWeight: "600",
+  },
+  continueButton: {
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
+  },
+  continueButtonText: {
+    color: Colors.white,
+    fontSize: 14,
     fontWeight: "600",
   },
   backToLogin: {
