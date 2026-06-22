@@ -125,7 +125,7 @@ export default function PropertyDetailScreen() {
             <Text style={styles.agentRole}>✓ Verified Agent</Text>
             <Text style={styles.agentRating}>⭐ 4.8 (120)</Text>
           </View>
-          <TouchableOpacity style={styles.chatAgentBtn}>
+          <TouchableOpacity style={styles.chatAgentBtn} onPress={() => router.push("/chat/1" as any)}>
             <Text style={styles.chatAgentText}>💬</Text>
           </TouchableOpacity>
         </View>
@@ -146,7 +146,7 @@ export default function PropertyDetailScreen() {
 
         <View style={styles.divider} />
 
-        <TouchableOpacity style={styles.reportLink}>
+        <TouchableOpacity style={styles.reportLink} onPress={() => router.push("/report-scam" as any)}>
           <Text style={styles.reportLinkText}>
             🚨 Found something suspicious? Report scam
           </Text>
@@ -154,7 +154,7 @@ export default function PropertyDetailScreen() {
       </View>
 
       <View style={styles.actionButtons}>
-        <TouchableOpacity style={styles.chatButton}>
+       <TouchableOpacity style={styles.chatButton} onPress={() => router.push("/chat/1" as any)}>
           <Text style={styles.chatButtonText}>💬 Chat</Text>
         </TouchableOpacity>
         <TouchableOpacity

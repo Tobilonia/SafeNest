@@ -19,6 +19,7 @@ const properties = [
     size: "120",
     verified: true,
     rating: 4.5,
+    image: require("../../assets/images/properties/property-1.jpg"),
   },
   {
     id: "2",
@@ -31,6 +32,7 @@ const properties = [
     size: "200",
     verified: true,
     rating: 4.8,
+    image: require("../../assets/images/properties/property-2.jpg"),
   },
   {
     id: "3",
@@ -43,6 +45,7 @@ const properties = [
     size: "60",
     verified: true,
     rating: 4.2,
+    image: require("../../assets/images/properties/property-3.jpg"),
   },
   {
     id: "4",
@@ -55,6 +58,7 @@ const properties = [
     size: "40",
     verified: true,
     rating: 4.0,
+    image: require("../../assets/images/properties/property-4.jpg"),
   },
   {
     id: "5",
@@ -67,14 +71,15 @@ const properties = [
     size: "200",
     verified: true,
     rating: 4.6,
+    image: require("../../assets/images/properties/property-5.jpg"),
   },
 ];
 
 const popularLocations = [
-  { id: "1", name: "Lekki", count: "100+" },
-  { id: "2", name: "Yaba", count: "150+" },
-  { id: "3", name: "Victoria Island", count: "80+" },
-  { id: "4", name: "Ikeja", count: "120+" },
+  { id: "1", name: "Lekki", count: "100+", image: require("../../assets/images/locations/lekki.jpg") },
+  { id: "2", name: "Yaba", count: "150+", image: require("../../assets/images/locations/yaba.jpg") },
+  { id: "3", name: "Victoria Island", count: "80+", image: require("../../assets/images/locations/victoria-island.jpg") },
+  { id: "4", name: "Ikeja", count: "120+", image: require("../../assets/images/locations/ikeja.jpg") },
 ];
 
 export default function HomeScreen() {
@@ -98,11 +103,11 @@ export default function HomeScreen() {
           <Text style={styles.locationArrow}>▾</Text>
         </View>
         <View style={styles.headerIcons}>
-          <TouchableOpacity style={styles.iconBtn}>
+          <TouchableOpacity style={styles.iconBtn} onPress={() => router.push("/notifications" as any)}>
             <Text style={styles.iconText}>🔔</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.avatarBtn}>
-            <Text style={styles.avatarText}>O</Text>
+         <TouchableOpacity style={styles.avatarBtn} onPress={() => router.push("/(tabs)/profile" as any)}>
+            <Image source={require("../../assets/images/avatars/avatar-olamide.jpg")} style={styles.avatarImage} />
           </TouchableOpacity>
         </View>
       </View>
@@ -153,13 +158,17 @@ export default function HomeScreen() {
       
       <View style={styles.quickActions}>
         {[
-          { icon: "🏠", label: "Rent Homes" },
-          { icon: "🛏", label: "Find Rooms" },
-          { icon: "📍", label: "Nearby" },
-          { icon: "❤️", label: "Saved" },
-          { icon: "👤", label: "Agents" },
+          { icon: "🏠", label: "Rent Homes", route: "/listings" },
+          { icon: "🛏", label: "Find Rooms", route: "/listings" },
+          { icon: "📍", label: "Nearby", route: "/listings" },
+          { icon: "❤️", label: "Saved", route: "/(tabs)/saved" },
+          { icon: "👤", label: "Agents", route: null },
         ].map((item) => (
-          <TouchableOpacity key={item.label} style={styles.quickAction}>
+          <TouchableOpacity
+            key={item.label}
+            style={styles.quickAction}
+            onPress={() => item.route && router.push(item.route as any)}
+          >
             <View style={styles.quickActionIcon}>
               <Text style={styles.quickActionEmoji}>{item.icon}</Text>
             </View>
@@ -188,7 +197,7 @@ export default function HomeScreen() {
             onPress={() => router.push(`/property/${item.id}`)}
           >
             <View style={styles.propertyImage}>
-              <Text style={styles.propertyEmoji}>🏢</Text>
+              <Image source={item.image} style={styles.propertyImagePhoto} resizeMode="cover" />
               {item.verified && (
                 <View style={styles.verifiedBadge}>
                   <Text style={styles.verifiedText}>✓ Verified</Text>
@@ -248,9 +257,7 @@ export default function HomeScreen() {
       >
         {popularLocations.map((loc) => (
           <TouchableOpacity key={loc.id} style={styles.locationCard}>
-            <View style={styles.locationImage}>
-              <Text style={styles.locationEmoji}>🌆</Text>
-            </View>
+            <Image source={loc.image} style={styles.locationImagePhoto} resizeMode="cover" />
             <Text style={styles.locationName}>{loc.name}</Text>
             <Text style={styles.locationCount}>
               {loc.count} properties
@@ -332,18 +339,16 @@ const styles = StyleSheet.create({
   iconText: {
     fontSize: 18,
   },
-  avatarBtn: {
+ avatarBtn: {
     width: 36,
     height: 36,
     borderRadius: 18,
     backgroundColor: Colors.primary,
-    alignItems: "center",
-    justifyContent: "center",
+    overflow: "hidden",
   },
-  avatarText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: Colors.white,
+  avatarImage: {
+    width: 36,
+    height: 36,
   },
   greetingSection: {
     paddingHorizontal: 24,
@@ -495,11 +500,11 @@ const styles = StyleSheet.create({
   propertyImage: {
     height: 130,
     backgroundColor: Colors.grey200,
-    alignItems: "center",
-    justifyContent: "center",
+    overflow: "hidden",
   },
-  propertyEmoji: {
-    fontSize: 40,
+  propertyImagePhoto: {
+    width: "100%",
+    height: "100%",
   },
   verifiedBadge: {
     position: "absolute",
@@ -597,14 +602,14 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     backgroundColor: Colors.white,
   },
-  locationImage: {
+ locationImage: {
     height: 80,
     backgroundColor: Colors.grey200,
-    alignItems: "center",
-    justifyContent: "center",
+    overflow: "hidden",
   },
-  locationEmoji: {
-    fontSize: 32,
+  locationImagePhoto: {
+    width: "100%",
+    height: "100%",
   },
   locationName: {
     fontSize: 13,
